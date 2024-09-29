@@ -101,7 +101,7 @@ const App: React.FC = () => {
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
       <div className="mb-4">
         <div className="font-bold min-h-6 mb-2">
-          <h3>LET'S PLAY</h3>
+          <h2 className="mb-3 text-center ">LET'S PLAY</h2>
           <div className="flex items-center gap-3">
             <label htmlFor="points" className="block text-gray-700 text-sm font-bold mb-2">
               Points:
@@ -115,48 +115,53 @@ const App: React.FC = () => {
               placeholder="Enter a number"
             />
           </div>
-          <div className="mt-2">
-            <p className="text-l">
-              Time: {seconds}.{milliseconds}s
-            </p>
-          </div>
         </div>
       </div>
 
       <div className="mb-4">
         <button
           onClick={handlePlay}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-200"
           disabled={!inputValue}
           style={{ cursor: !inputValue ? "not-allowed" : "pointer" }}
         >
           {isPlaying || isGameOver ? "Restart" : "Play"}
         </button>
       </div>
-
-      <div className="relative w-96 h-96 bg-white rounded-lg border border-gray-300 mt-8">
-        {displayPoints.map(({ id, position, zIndex, fadeOut }) => {
-          return (
-            <div
-              key={id}
-              onClick={() => {
-                if (fadeOut) return;
-                handlePointClick(id);
-              }}
-              className={`${fadeOut ? "opacity-0 bg-orange-700" : "opacity-100"
-                } absolute w-10 h-10 rounded-full bg-white border border-black flex items-center justify-center font-bold cursor-pointer transition-opacity duration-1000`}
-              style={{
-                top: position.top,
-                left: position.left,
-                zIndex,
-                cursor: isGameOver ? "no-drop" : "pointer",
-              }}
-            >
-              {id}
-            </div>
-          );
-        })}
+      <div className="mt-8">
+        <div className="h-11 bg-orange-300 flex items-center ">
+          <p className="text-l ml-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 inline">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            : {seconds}.{milliseconds}s
+          </p>
+        </div>
+        <div className="relative w-96 h-96 bg-white rounded-b-lg border border-gray-300 bg-[url('https://thuthuatoffice.net/wp-content/uploads/2023/08/8478a990a48e4fa7e5c7b8927b97a995.jpg')]  bg-center ">
+          {displayPoints.map(({ id, position, zIndex, fadeOut }) => {
+            return (
+              <div
+                key={id}
+                onClick={() => {
+                  if (fadeOut) return;
+                  handlePointClick(id);
+                }}
+                className={`${fadeOut ? "opacity-0 bg-orange-600" : "opacity-100"
+                  } absolute w-10 h-10 rounded-full bg-white border border-black flex items-center justify-center font-bold cursor-pointer transition-opacity duration-1000`}
+                style={{
+                  top: position.top,
+                  left: position.left,
+                  zIndex,
+                  cursor: isGameOver ? "no-drop" : "pointer",
+                }}
+              >
+                {id}
+              </div>
+            );
+          })}
+        </div>
       </div>
+
       <ToastContainer theme="colored" />
     </div>
   );
