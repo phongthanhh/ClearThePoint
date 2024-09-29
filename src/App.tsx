@@ -35,6 +35,8 @@ const App: React.FC = () => {
 
   const seconds = Math.floor(time / 1000); // Calculate full seconds
   const milliseconds = Math.floor((time % 1000) / 100); // Get the first digit of milliseconds
+  const activePoints = displayPoints.filter((point) => !point.fadeOut);
+  const firstPoint = activePoints[0];
 
   const handlePlay = () => {
     if (isPlaying || isGameOver) {
@@ -70,9 +72,6 @@ const App: React.FC = () => {
   const handlePointClick = (id: number) => {
     // CASE 1: Game over -> do nothing
     if (isGameOver) return;
-
-    const activePoints = displayPoints.filter((point) => !point.fadeOut);
-    const firstPoint = activePoints[0];
 
     // CASE 2: Point clicked not is first active points
     // If the clicked point is not the first active point, end the game
@@ -129,13 +128,18 @@ const App: React.FC = () => {
         </button>
       </div>
       <div className="mt-8">
-        <div className="h-11 bg-orange-300 flex items-center ">
+        <div className="h-11 bg-orange-300 flex items-center justify-between ">
           <p className="text-l ml-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 inline">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
             : {seconds}.{milliseconds}s
           </p>
+
+          {firstPoint && <p className="text-lg mr-3 text-stone-950"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 inline">
+            <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+          </svg>
+            {firstPoint.id} </p>}
         </div>
         <div className="relative w-96 h-96 bg-white rounded-b-lg border border-gray-300 bg-[url('https://thuthuatoffice.net/wp-content/uploads/2023/08/8478a990a48e4fa7e5c7b8927b97a995.jpg')]  bg-center ">
           {displayPoints.map(({ id, position, zIndex, fadeOut }) => {
@@ -146,13 +150,14 @@ const App: React.FC = () => {
                   if (fadeOut) return;
                   handlePointClick(id);
                 }}
-                className={`${fadeOut ? "opacity-0 bg-orange-600" : "opacity-100"
-                  } absolute w-10 h-10 rounded-full bg-white border border-black flex items-center justify-center font-bold cursor-pointer transition-opacity duration-1000`}
+                className={`${fadeOut ? "opacity-0" : "opacity-100"
+                  } absolute w-10 h-10 rounded-full border border-black flex items-center justify-center font-bold cursor-pointer transition-opacity duration-1000`}
                 style={{
                   top: position.top,
                   left: position.left,
                   zIndex,
                   cursor: isGameOver ? "no-drop" : "pointer",
+                  backgroundColor: fadeOut ? "#ea580c" : "white"
                 }}
               >
                 {id}
