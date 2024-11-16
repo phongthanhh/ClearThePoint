@@ -3,18 +3,11 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Point from "./components/Point";
-import { getSecondsAnMillisecondsFirstDigit } from "./utils/getSecondsAnMillisecondsFirstDigit";
-import { generateDisplayPoint } from "./utils/generateDisplayPoints";
+import { generateDisplayPoint, getSecondsAnMillisecondsFirstDigit } from "./utils";
+import { FADE_OUT_TIMEOUT } from "./constants";
+import { DisplayPoint } from "./types";
 
-export type DisplayPoint = {
-	id: string;
-	number: number;
-	position: { top: string; left: string };
-	zIndex: number;
-	fadeOut: boolean;
-};
 
-export const FADE_OUT_TIMEOUT = 3000;
 
 const App: React.FC = () => {
 	const [inputValue, setInputValue] = useState<string>("");
@@ -25,6 +18,13 @@ const App: React.FC = () => {
 	const [isCompleted, setIsCompleted] = useState(false);
 	const [autoPlay, setAutoPlay] = useState(false);
 
+	const formattedTime = getSecondsAnMillisecondsFirstDigit(time);
+	const activePoints = displayPoints.filter((point) => !point.fadeOut);
+	const firstPoint = activePoints[0];
+
+	const isRestart = isCompleted || isGameOver || isPlaying;
+
+	//Playing
 	useEffect(() => {
 		let timer: ReturnType<typeof setTimeout> | null = null;
 		if (isPlaying) {
@@ -39,12 +39,7 @@ const App: React.FC = () => {
 		};
 	}, [isPlaying]);
 
-	const formattedTime = getSecondsAnMillisecondsFirstDigit(time);
-	const activePoints = displayPoints.filter((point) => !point.fadeOut);
-	const firstPoint = activePoints[0];
-
-	const isRestart = isCompleted || isGameOver || isPlaying;
-
+	//Restart
 	const handleRestart = () => {
 		if (autoPlay) {
 			setAutoPlay(false);
@@ -64,6 +59,7 @@ const App: React.FC = () => {
 		setIsCompleted(false);
 	};
 
+	//Click Play
 	const handlePlay = () => {
 		setIsPlaying(true);
 		setDisplayPoints(generateDisplayPoint(Number(inputValue)));

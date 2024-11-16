@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { DisplayPoint, FADE_OUT_TIMEOUT } from "../App";
 import { getSecondsAnMillisecondsFirstDigit } from "../utils/getSecondsAnMillisecondsFirstDigit";
+import { FADE_OUT_TIMEOUT } from "../constants";
+import { DisplayPoint } from "../types";
 
 type Props = {
   isGameOver: boolean;
